@@ -6,14 +6,19 @@ services:
     image: ghcr.io/servercontainers/netatalk
     restart: always
     network_mode: host
+    env_file: ./users.env
     environment:
       NETATALK_GLOBAL_CONFIG_1: 'mimic model = TimeCapsule'
-
-      ACCOUNT_alice: alipass
-      ACCOUNT_bob: bobpass
-
-      NETATALK_VOLUME_CONFIG_aliceonly: "[Alice Share]; path=/shares/alice; valid users = alice"
-      NETATALK_VOLUME_CONFIG_bobstm: "[TimeCapsule]; path=/shares/timemachine; valid users = bob; vol size limit = 100000; time machine = yes"
+      NETATALK_GLOBAL_CONFIG_2: 'afp listen = 192.168.178.2'
+      NETATALK_GLOBAL_CONFIG_5: 'log level = default:warn'
+      NETATALK_GLOBAL_CONFIG_6: 'uam list = uams_dhx.so,uams_dhx2.so'
+      NETATALK_GLOBAL_CONFIG_7: 'unix charset = UTF8'
+      NETATALK_GLOBAL_CONFIG_8: 'mac charset = MAC_ROMAN'
+      NETATALK_GLOBAL_CONFIG_9: 'vol charset = UTF8'
+      NETATALK_GLOBAL_CONFIG_10: 'afp interfaces = eth0'
+      NETATALK_VOLUME_CONFIG_DATA: "[Data]; path=/media/data/; valid users = dirk"
+      NETATALK_VOLUME_CONFIG_TM: "[TM]; path=/media/TM; valid users = dirk; vol size limit = 15000000; time machine = yes"
+      AVAHI_NAME: "Home Server"
     volumes:
-      - ./shares/alice:/shares/alice
-      - ./shares/timemachine:/shares/timemachine
+      - ./media/data/:/media/data/
+      - ./media/TM:/media/TM

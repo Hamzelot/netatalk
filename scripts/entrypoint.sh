@@ -5,18 +5,9 @@ export IFS=$'\n'
 cat <<EOF
 ################################################################################
 
-Welcome to the ghcr.io/servercontainers/netatalk
+Welcome to the Netatalk Docker Container
 
 ################################################################################
-
-You'll find this container sourcecode here:
-
-    https://github.com/ServerContainers/netatalk
-
-The container repository will be updated regularly.
-
-################################################################################
-
 
 EOF
 
@@ -35,10 +26,10 @@ if [ ! -f "$INITALIZED" ]; then
   for I_CONF in $(env | grep '^NETATALK_GLOBAL_CONFIG_')
   do
     CONF_CONF_VALUE=$(echo "$I_CONF" | sed 's/^[^=]*=//g')
-    echo ">> global config - adding: '$CONF_CONF_VALUE' to /etc/afp.conf"
-    sed -i '/\[Global\]/a\  '"$CONF_CONF_VALUE" /etc/afp.conf
+    echo ">> global config - adding: '$CONF_CONF_VALUE' to /etc/netatalk/afp.conf"
+    sed -i '/\[Global\]/a\  '"$CONF_CONF_VALUE" /etc/netatalk/afp.conf
   done
-  env | grep 'mimic model' 2>/dev/null >/dev/null || grep 'mimic model' /etc/afp.conf 2>/dev/null >/dev/null || sed -i '/\[Global\]/a\  '"mimic model = $MODEL" /etc/afp.conf
+  env | grep 'mimic model' 2>/dev/null >/dev/null || grep 'mimic model' /etc/netatalk/afp.conf 2>/dev/null >/dev/null || sed -i '/\[Global\]/a\  '"mimic model = $MODEL" /etc/netatalk/afp.conf
 
   ##
   # USER ACCOUNTS
@@ -110,8 +101,8 @@ if [ ! -f "$INITALIZED" ]; then
 </service-group>' >> /etc/avahi/services/afp.service
     fi
 
-    echo "$CONF_CONF_VALUE" | sed 's/;/\n/g' >> /etc/afp.conf
-    echo "" >> /etc/afp.conf
+    echo "$CONF_CONF_VALUE" | sed 's/;/\n/g' >> /etc/netatalk/afp.conf
+    echo "" >> /etc/netatalk/afp.conf
 
   done
 
